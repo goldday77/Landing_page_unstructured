@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tab Baru</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a73e8;
+      --blue-hover: #1557b0;
+      --blue-light: #e8f0fe;
+      --slate-50: #F8FAFC;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --white: #ffffff;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', 'Google Sans', Arial, sans-serif;
+      background: #fff;
+      color: #202124;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== LAYOUT MIRIP GOOGLE NEW TAB ===== */
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background: #fff;
+    }
+
+    /* Top right corner */
+    .top-right {
+      position: fixed;
+      top: 0; right: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      z-index: 10;
+    }
+
+    .top-right a {
+      font-size: 13px;
+      color: #202124;
+      text-decoration: none;
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+    .top-right a:hover { background: #f1f3f4; }
+
+    .top-right .apps-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: #5f6368;
+    }
+    .top-right .apps-btn:hover { background: #f1f3f4; }
+
+    /* ===== CENTER CONTENT ===== */
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 18vh;
+      width: 100%;
+      max-width: 640px;
+      padding: 0 16px;
+    }
+
+    /* ===== TOMBOL PENGELOLAAN DATA ===== */
+    .portal-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      box-shadow: 0 2px 8px rgba(26,115,232,0.25);
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+      text-decoration: none;
+      margin-bottom: 40px;
+    }
+
+    .portal-btn:hover {
+      background: var(--blue-hover);
+      box-shadow: 0 4px 16px rgba(26,115,232,0.35);
+      transform: translateY(-1px);
+    }
+
+    .portal-btn:active { transform: scale(0.98); }
+
+    .portal-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+    /* ===== SEARCH BAR (tiruan Google) ===== */
+    .search-wrap {
+      width: 100%;
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9aa0a6;
+      pointer-events: none;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 13px 56px 13px 52px;
+      border: 1px solid #dfe1e5;
+      border-radius: 50px;
+      font-size: 16px;
+      font-family: inherit;
+      color: #202124;
+      background: #fff;
+      outline: none;
+      box-shadow: 0 1px 6px rgba(32,33,36,0.1);
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+
+    #search-input:focus,
+    #search-input:hover {
+      border-color: rgba(223,225,229,0);
+      box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+    }
+
+    #search-input::placeholder { color: #9aa0a6; }
+
+    .search-right-icons {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #9aa0a6;
+    }
+
+    .search-right-icons svg { width: 20px; height: 20px; cursor: pointer; }
+    .search-right-icons svg:hover { color: #5f6368; }
+
+    /* ===== SHORTCUTS (mirip Google most visited) ===== */
+    .shortcuts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      max-width: 600px;
+    }
+
+    .shortcut {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 80px;
+      padding: 12px 4px 10px;
+      border-radius: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .shortcut:hover { background: #f1f3f4; }
+
+    .shortcut-icon {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: #f1f3f4;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #5f6368;
+      overflow: hidden;
+    }
+
+    .shortcut-icon img { width: 28px; height: 28px; object-fit: contain; }
+
+    .shortcut-label {
+      font-size: 11.5px;
+      color: #202124;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 76px;
+    }
+
+    /* ===== MODAL / OVERLAY HALAMAN PORTAL ===== */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 40px;
+      overflow-y: auto;
+    }
+
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: #F8FAFC;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 16px 40px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: slideUp 0.22s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal top bar */
+    .modal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: #fff;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .modal-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-brand-icon {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .modal-brand-icon svg { width: 20px; height: 20px; color: #fff; }
+
+    .modal-brand-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1E293B;
+    }
+
+    .modal-brand-sub {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+
+    .modal-close {
+      width: 36px; height: 36px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: #5f6368;
+      font-size: 20px;
+      transition: background 0.1s;
+    }
+
+    .modal-close:hover { background: #f1f3f4; }
+
+    /* Modal body */
+    .modal-body {
+      padding: 28px 28px 32px;
+    }
+
+    .modal-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    /* 5 Menu cards */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .menu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px 18px 16px;
+      background: #fff;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #1E293B;
+      cursor: pointer;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--c, var(--blue));
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .menu-card:hover {
+      border-color: #BFDBFE;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .menu-card:hover::before { opacity: 1; }
+
+    .menu-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--ic, #EFF6FF);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .menu-icon svg { width: 22px; height: 22px; color: var(--c, var(--blue)); }
+
+    .menu-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1E293B;
+      line-height: 1.35;
+    }
+
+    .menu-desc {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .menu-arrow {
+      position: absolute;
+      bottom: 14px; right: 14px;
+      color: #CBD5E1;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .menu-card:hover .menu-arrow { color: var(--c, var(--blue)); transform: translateX(3px); }
+
+    /* Quick links inside modal */
+    .modal-links {
+      border-top: 1px solid #E2E8F0;
+      padding-top: 20px;
+    }
+
+    .links-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .link-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #fff;
+      border: 1px solid #E2E8F0;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 12.5px;
+      color: #475569;
+      font-weight: 500;
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    .link-pill:hover { background: #EFF6FF; border-color: #BFDBFE; color: var(--blue); }
+
+    .link-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .center { margin-top: 14vh; }
+      .portal-btn { font-size: 14px; padding: 14px 22px; }
+      .menu-grid { grid-template-columns: 1fr 1fr; }
+      .modal-body { padding: 20px 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== TOP RIGHT (mirip Google) ===== -->
+<div class="top-right">
+  <a href="https://mail.google.com" target="_blank">Gmail</a>
+  <a href="https://www.google.com/imghp" target="_blank">Gambar</a>
+  <!-- Ikon grid apps -->
+  <button class="apps-btn" title="Google apps" onclick="window.open('https://www.google.com/intl/id/about/products','_blank')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/>
+      <circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>
+      <circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ===== CENTER ===== -->
+<div class="page">
+  <div class="center">
+
+    <!-- TOMBOL UTAMA (menggantikan logo Google) -->
+    <button class="portal-btn" onclick="openPortal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <path d="M8 21h8M12 17v4"/>
+        <path d="M7 8h10M7 12h6"/>
+      </svg>
+      PENGELOLAAN DATA UNSTRUCTURED
+    </button>
+
+    <!-- SEARCH BAR (langsung ke Google) -->
+    <form class="search-wrap" action="https://www.google.com/search" method="GET" target="_self">
+      <span class="search-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </span>
+      <input type="text" id="search-input" name="q" placeholder="Cari di Google atau ketik URL" autocomplete="off" autofocus />
+      <span class="search-right-icons">
+        <!-- Ikon mikrofon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Cari dengan suara">
+          <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/>
+        </svg>
+        <!-- Ikon kamera -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="Penelusuran gambar">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+      </span>
+    </form>
+
+    <!-- SHORTCUTS (mirip Google most visited) -->
+    <!--
+      ============================================================
+      CARA EDIT SHORTCUT:
+      Ganti href, warna background .shortcut-icon, huruf/angka,
+      dan .shortcut-label sesuai kebutuhan Anda.
+      ============================================================
+    -->
+    <div class="shortcuts">
+
+      <a class="shortcut" href="https://diamond.kemenkeu.go.id" target="_blank">
+        <div class="shortcut-icon" style="background:#1a1a2e;">
+          <span style="color:#fff;font-size:14px;font-weight:700;">D</span>
+        </div>
+        <span class="shortcut-label">DIAMOND v2.5.7</span>
+      </a>
+
+      <a class="shortcut" href="https://djponline.pajak.go.id" target="_blank">
+        <div class="shortcut-icon" style="background:#fff3cd;">
+          <span style="color:#d97706;font-size:14px;font-weight:700;">DJ</span>
+        </div>
+        <span class="shortcut-label">DJP Connect</span>
+      </a>
+
+      <a class="shortcut" href="https://monitoringspt.kemenkeu.go.id" target="_blank">
+        <div class="shortcut-icon" style="background:#4f46e5;">
+          <span style="color:#fff;font-size:13px;font-weight:700;">M</span>
+        </div>
+        <span class="shortcut-label">monitoringspt</span>
+      </a>
+
+      <a class="shortcut" href="https://satukemenkeu.kemenkeu.go.id" target="_blank">
+        <div class="shortcut-icon" style="background:#e8f4fd;">
+          <img src="https://www.google.com/s2/favicons?sz=64&domain=kemenkeu.go.id" alt="Satu Kemenkeu" />
+        </div>
+        <span class="shortcut-label">Satu Kemenkeu</span>
+      </a>
+
+      <a class="shortcut" href="https://sharepoint.com" target="_blank">
+        <div class="shortcut-icon" style="background:#e6f2fb;">
+          <span style="color:#0078d4;font-size:14px;font-weight:700;">SP</span>
+        </div>
+        <span class="shortcut-label">SharePoint</span>
+      </a>
+
+      <a class="shortcut" href="https://edlink.kemenkeu.go.id" target="_blank">
+        <div class="shortcut-icon" style="background:#ecfdf5;">
+          <span style="color:#059669;font-size:13px;font-weight:700;">EL</span>
+        </div>
+        <span class="shortcut-label">Edlink</span>
+      </a>
+
+      <a class="shortcut" href="#" target="_blank">
+        <div class="shortcut-icon" style="background:#fff0f0;">
+          <span style="color:#dc2626;font-size:13px;font-weight:700;">SB</span>
+        </div>
+        <span class="shortcut-label">Sulselbartra</span>
+      </a>
+
+      <a class="shortcut" href="https://web.whatsapp.com" target="_blank">
+        <div class="shortcut-icon" style="background:#e7fbe9;">
+          <span style="color:#25d366;font-size:14px;font-weight:700;">WA</span>
+        </div>
+        <span class="shortcut-label">WhatsApp</span>
+      </a>
+
+      <a class="shortcut" href="https://youtube.com" target="_blank">
+        <div class="shortcut-icon" style="background:#fff0f0;">
+          <span style="color:#FF0000;font-size:13px;font-weight:700;">YT</span>
+        </div>
+        <span class="shortcut-label">YouTube</span>
+      </a>
+
+      <!-- Tombol tambah shortcut -->
+      <div class="shortcut" onclick="alert('Edit file HTML untuk menambah shortcut — cari komentar CARA EDIT SHORTCUT')">
+        <div class="shortcut-icon" style="background:#f1f3f4;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </div>
+        <span class="shortcut-label" style="color:#9aa0a6;">Tambah</span>
+      </div>
+
+    </div><!-- /shortcuts -->
+  </div>
+</div>
+
+<!-- ===== OVERLAY / MODAL PORTAL ===== -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+
+    <!-- Top bar modal -->
+    <div class="modal-topbar">
+      <div class="modal-brand">
+        <div class="modal-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="modal-brand-text">Portal Pengelolaan Data</div>
+          <div class="modal-brand-sub">Dashboard Unstructured Data — Seksi Anda</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closePortal()" title="Tutup">&#x2715;</button>
+    </div>
+
+    <!-- Body modal -->
+    <div class="modal-body">
+      <div class="modal-section-label">Menu Utama</div>
+
+      <div class="menu-grid">
+
+        <!--
+          ============================================================
+          TOMBOL 1 — Tata Cara Pengelolaan Data Unstructured
+          EDIT URL: Ganti href="#" dengan link tujuan Anda
+          Contoh: href="https://drive.google.com/drive/folders/XXXXX"
+          ============================================================
+        -->
+        <a class="menu-card" href="#" target="_blank"
+           style="--c:#1a73e8; --ic:#EFF6FF;">
+          <div class="menu-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <div class="menu-title">Tata Cara Pengelolaan Data Unstructured</div>
+            <div class="menu-desc">SOP, panduan, dan prosedur standar</div>
+          </div>
+          <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+
+        <!--
+          ============================================================
+          TOMBOL 2 — Monitoring Unstructured Data
+          EDIT URL: Ganti href="#" dengan link tujuan Anda
+          Contoh: href="https://docs.google.com/spreadsheets/d/XXXXX"
+          ============================================================
+        -->
+        <a class="menu-card" href="#" target="_blank"
+           style="--c:#0891b2; --ic:#ECFEFF;">
+          <div class="menu-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div>
+            <div class="menu-title">Monitoring Unstructured Data</div>
+            <div class="menu-desc">Dashboard pantauan & status data</div>
+          </div>
+          <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+
+        <!--
+          ============================================================
+          TOMBOL 3 — Download Aplikasi Rename File
+          EDIT URL: Ganti href="#" dengan link download
+          Contoh: href="https://storage.kantor.com/apps/rename-tool.exe"
+          ============================================================
+        -->
+        <a class="menu-card" href="#" target="_blank"
+           style="--c:#7c3aed; --ic:#F5F3FF;">
+          <div class="menu-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="menu-title">Download Aplikasi Rename File</div>
+            <div class="menu-desc">Unduh tool penamaan file standar</div>
+          </div>
+          <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+
+        <!--
+          ============================================================
+          TOMBOL 4 — Notula Hasil Pembahasan
+          EDIT URL: Ganti href="#" dengan link tujuan Anda
+          Contoh: href="https://docs.google.com/document/d/XXXXX"
+          ============================================================
+        -->
+        <a class="menu-card" href="#" target="_blank"
+           style="--c:#d97706; --ic:#FFFBEB;">
+          <div class="menu-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div>
+            <div class="menu-title">Notula Hasil Pembahasan</div>
+            <div class="menu-desc">Catatan rapat & hasil diskusi data</div>
+          </div>
+          <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+
+        <!--
+          ============================================================
+          TOMBOL 5 — Pengelolaan Data Hard Copy (Fisik)
+          EDIT URL: Ganti href="#" dengan link tujuan Anda
+          Contoh: href="https://drive.google.com/drive/folders/YYYYY"
+          ============================================================
+        -->
+        <a class="menu-card" href="#" target="_blank"
+           style="--c:#059669; --ic:#ECFDF5;">
+          <div class="menu-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </div>
+          <div>
+            <div class="menu-title">Pengelolaan Data Hard Copy (Fisik)</div>
+            <div class="menu-desc">Arsip fisik, filing & penyimpanan</div>
+          </div>
+          <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </a>
+
+      </div><!-- /menu-grid -->
+
+      <!-- Quick links -->
+      <!--
+        ============================================================
+        QUICK LINKS di dalam modal
+        CARA EDIT: Tambah/hapus <a class="link-pill"> sesuai kebutuhan
+        ============================================================
+      -->
+      <div class="modal-links">
+        <div class="modal-section-label" style="margin-bottom:12px;">Quick Links</div>
+        <div class="links-row">
+          <a class="link-pill" href="https://mail.google.com" target="_blank">
+            <span class="link-dot" style="background:#EA4335;"></span>Gmail
+          </a>
+          <a class="link-pill" href="https://drive.google.com" target="_blank">
+            <span class="link-dot" style="background:#FBBC04;"></span>Google Drive
+          </a>
+          <a class="link-pill" href="https://docs.google.com" target="_blank">
+            <span class="link-dot" style="background:#4285F4;"></span>Google Docs
+          </a>
+          <a class="link-pill" href="https://sheets.google.com" target="_blank">
+            <span class="link-dot" style="background:#34A853;"></span>Google Sheets
+          </a>
+          <a class="link-pill" href="https://calendar.google.com" target="_blank">
+            <span class="link-dot" style="background:#1a73e8;"></span>Google Calendar
+          </a>
+          <a class="link-pill" href="https://sharepoint.com" target="_blank">
+            <span class="link-dot" style="background:#0078d4;"></span>SharePoint
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /modal-body -->
+  </div><!-- /modal -->
+</div><!-- /overlay -->
+
+<script>
+  function openPortal() {
+    document.getElementById('overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePortal() {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('overlay')) closePortal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePortal();
+  });
+</script>
+
+</body>
+</html>
