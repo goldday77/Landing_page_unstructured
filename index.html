@@ -1113,6 +1113,20 @@
   const MV_KEY = 'mostVisitedSites_v1';
   const MV_MAX = 10;
 
+  /* Link starter — tetap tampil selagi belum ada link lain yang lebih
+     sering dikunjungi. Akan otomatis tergeser/diganti begitu ada link
+     yang mencapai MV_THRESHOLD kali klik. */
+  const MV_DEFAULTS = [
+    { url: 'https://web.whatsapp.com', title: 'WhatsApp Web' },
+    { url: 'https://youtube.com', title: 'YouTube' },
+    { url: 'http://10.245.4.246:85/diamond/index.php', title: 'DIAMOND' },
+    { url: 'https://kemenkeu.sharepoint.com/sites/P3DE/Shared%20Documents/Forms/AllItems.aspx?csf=1&web=1&e=vYmlWS&CID=e108e5ad%2Db3db%2D4d5f%2Db24d%2D4048bd3614f1&FolderCTID=0x012000CBF6E11810F4AE479F0928ABC8E0FB35&id=%2Fsites%2FP3DE%2FShared%20Documents%2FGeneral', title: 'SharePoint P3DE' }
+  ];
+
+  /* Jumlah klik minimal sebelum sebuah link dianggap "sering dikunjungi"
+     dan berhak masuk/menggeser daftar. */
+  const MV_THRESHOLD = 3;
+
   function mvEscape(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -1174,10 +1188,15 @@
   function mvRender() {
     const wrap = document.getElementById('mostVisited');
     if (!wrap) return;
-    const list = mvLoad()
-      .slice()
-      .sort(function (a, b) { return (b.count - a.count) || (b.lastVisited - a.lastVisited); })
-      .slice(0, MV_MAX);
+
+    const qualified = mvLoad()
+      .filter(function (item) { return item.count >= MV_THRESHOLD; })
+      .sort(function (a, b) { return (b.count - a.count) || (b.lastVisited - a.lastVisited); });
+
+    const qualifiedUrls = qualified.map(function (item) { return item.url; });
+    const fillers = MV_DEFAULTS.filter(function (d) { return qualifiedUrls.indexOf(d.url) === -1; });
+
+    const list = qualified.concat(fillers).slice(0, MV_MAX);
 
     if (list.length === 0) {
       wrap.style.display = 'none';
