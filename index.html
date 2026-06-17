@@ -960,15 +960,8 @@
           <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
         </a>
 
-        <!--
-          ============================================================
-          TOMBOL 5 — Pengelolaan Data Hard Copy (Fisik)
-          EDIT URL: Ganti href="#" dengan link tujuan Anda
-          Contoh: href="https://drive.google.com/drive/folders/YYYYY"
-          ============================================================
-        -->
-        <a class="menu-card" href="#" target="_blank"
-           style="--c:#059669; --ic:#ECFDF5;">
+        <!-- TOMBOL 5 — membuka tutorial Pengelolaan Data Hard Copy -->
+        <div class="menu-card" onclick="openHardcopy()" style="--c:#059669; --ic:#ECFDF5; cursor:pointer;">
           <div class="menu-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
@@ -980,7 +973,7 @@
             <div class="menu-desc">Arsip fisik, filing & penyimpanan</div>
           </div>
           <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
-        </a>
+        </div>
 
       </div><!-- /menu-grid -->
 
@@ -1094,11 +1087,79 @@
     document.body.style.overflow = '';
   }
 
+  /* ===== HARDCOPY WORKFLOW (Tombol 5) ===== */
+  const HC_TOTAL = 4;
+  let hcCurrent = 1;
+
+  function buildHcDots() {
+    const wrap = document.getElementById('hcDots');
+    wrap.innerHTML = '';
+    for (let i = 1; i <= HC_TOTAL; i++) {
+      const d = document.createElement('span');
+      d.className = 'wf-dot' + (i < hcCurrent ? ' done' : i === hcCurrent ? ' active' : '');
+      wrap.appendChild(d);
+    }
+  }
+
+  function updateHardcopy() {
+    for (let i = 1; i <= HC_TOTAL; i++) {
+      const el = document.getElementById('hc-step-' + i);
+      if (el) el.classList.toggle('active', i === hcCurrent);
+    }
+    document.getElementById('hcStepLabel').textContent = 'Langkah ' + hcCurrent + ' dari ' + HC_TOTAL;
+    document.getElementById('hcPageNum').textContent = hcCurrent + ' / ' + HC_TOTAL;
+    document.getElementById('hcProgress').style.width = (hcCurrent / HC_TOTAL * 100) + '%';
+    document.getElementById('hcPrev').disabled = hcCurrent === 1;
+    const nextBtn = document.getElementById('hcNext');
+    if (hcCurrent === HC_TOTAL) {
+      nextBtn.textContent = '✓ Selesai';
+      nextBtn.classList.add('finish');
+    } else {
+      nextBtn.textContent = 'Selanjutnya →';
+      nextBtn.classList.remove('finish');
+    }
+    buildHcDots();
+  }
+
+  function hcNext() {
+    if (hcCurrent === HC_TOTAL) { closeHardcopy(); return; }
+    hcCurrent++;
+    updateHardcopy();
+    document.querySelector('#hcOverlay .wf-body').scrollTop = 0;
+  }
+
+  function hcPrev() {
+    if (hcCurrent > 1) { hcCurrent--; updateHardcopy(); }
+    document.querySelector('#hcOverlay .wf-body').scrollTop = 0;
+  }
+
+  function openHardcopy() {
+    hcCurrent = 1;
+    updateHardcopy();
+    document.getElementById('hcOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeHardcopy() {
+    document.getElementById('hcOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* Dipanggil dari link "disini" di Langkah 4 — pindah ke SOP Tombol 1 */
+  function goToUnstructuredSOP() {
+    closeHardcopy();
+    openWarning();
+  }
+
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { closeWarning(); closeWorkflow(); closePortal(); }
+    if (e.key === 'Escape') { closeWarning(); closeWorkflow(); closePortal(); closeHardcopy(); }
     if (document.getElementById('wfOverlay').classList.contains('open')) {
       if (e.key === 'ArrowRight') wfNext();
       if (e.key === 'ArrowLeft') wfPrev();
+    }
+    if (document.getElementById('hcOverlay').classList.contains('open')) {
+      if (e.key === 'ArrowRight') hcNext();
+      if (e.key === 'ArrowLeft') hcPrev();
     }
   });
 
@@ -1415,6 +1476,135 @@ Lokasi data: <span class="hl">/E:/2026/UNSTRUCTURED/GOWA ND-651.P_PJ.1031_2026</
 
   </div><!-- /wf-page -->
 </div><!-- /wf-overlay -->
+
+<!-- ===== HARDCOPY WORKFLOW PAGE (Tombol 5) ===== -->
+<div class="wf-overlay" id="hcOverlay">
+  <div class="wf-page">
+
+    <div class="wf-topbar">
+      <div class="wf-brand">
+        <div class="wf-brand-icon" style="background:#059669;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <div>
+          <div class="wf-brand-text">Pengelolaan Data Hard Copy (Fisik)</div>
+          <div class="wf-brand-sub">Alur Kerja Standar · 4 Langkah</div>
+        </div>
+      </div>
+      <button class="wf-close" onclick="closeHardcopy()">✕</button>
+    </div>
+
+    <div class="wf-progress-bar">
+      <div class="wf-progress-fill" id="hcProgress" style="width:25%"></div>
+    </div>
+
+    <div class="wf-body">
+      <!-- Step dots -->
+      <div class="wf-step-counter">
+        <span id="hcStepLabel">Langkah 1 dari 4</span>
+        <div class="wf-step-dots" id="hcDots"></div>
+      </div>
+
+      <!-- LANGKAH 1 -->
+      <div class="wf-step-card active" id="hc-step-1">
+        <div class="wf-step-num">1</div>
+        <div class="wf-step-title">PIC ILAP Menerima Dokumen Hardcopy</div>
+        <div class="wf-step-desc">
+          PIC ILAP (Instansi/Lembaga/Asosiasi/Perorangan) menerima dokumen dalam bentuk fisik/hardcopy dari pihak pengirim data.
+        </div>
+        <div class="wf-step-tip">
+          <strong>📌 Ingat:</strong> Catat nama ILAP dan jumlah dokumen yang diterima sebagai catatan awal sebelum lanjut ke proses scan.
+        </div>
+      </div>
+
+      <!-- LANGKAH 2 -->
+      <div class="wf-step-card" id="hc-step-2">
+        <div class="wf-step-num">2</div>
+        <div class="wf-step-title">Scan Dokumen Menggunakan Perangkat Scan</div>
+        <div class="wf-step-desc">
+          PIC ILAP melakukan scan dokumen menggunakan perangkat scan yang tersedia di <strong>sebelah Ruang Rapat Kecil</strong>. Ikuti langkah-langkah scan dokumen pada tutorial berikut.
+        </div>
+        <!--
+          ============================================================
+          EDIT URL: Ganti href="#" pada id="scanTutorialLink" di bawah
+          dengan link tutorial cara scan dokumen.
+          ============================================================
+        -->
+        <div class="wf-step-tip">
+          <strong>🔗 Tutorial Scan Dokumen:</strong><br>
+          <a href="#" target="_blank" id="scanTutorialLink"
+             style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
+            📄 Klik Disini ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- LANGKAH 3 -->
+      <div class="wf-step-card" id="hc-step-3">
+        <div class="wf-step-num">3</div>
+        <div class="wf-step-title">Rekam Meta Data ke Excel Monitoring</div>
+        <div class="wf-step-desc">
+          Setelah dokumen selesai di-scan, PIC merekam meta data dokumen tersebut ke excel monitoring data hard copy.
+        </div>
+        <!--
+          ============================================================
+          EDIT URL: Ganti href="#" pada id="hcExcelLink" di bawah
+          dengan link file excel monitoring data hard copy di SharePoint.
+          ============================================================
+        -->
+        <div class="wf-step-tip">
+          <strong>🔗 Excel Monitoring Data Hard Copy:</strong><br>
+          <a href="#" target="_blank" id="hcExcelLink"
+             style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
+            📊 Klik Disini ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- LANGKAH 4 -->
+      <div class="wf-step-card" id="hc-step-4">
+        <div class="wf-step-num">4</div>
+        <div class="wf-step-title">Alirkan Data ke PIDE sesuai SOP Data Unstructured</div>
+        <div class="wf-step-desc">
+          Setelah meta data terekam, PIC mengalirkan data ke PIDE sesuai SOP pengaliran data unstructured (lihat Tombol 1 — Tata Cara Pengelolaan Data Unstructured).
+        </div>
+        <div class="wf-step-tip">
+          <strong>🔗 SOP Pengaliran Data Unstructured:</strong><br>
+          <a href="#" onclick="goToUnstructuredSOP(); return false;"
+             style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;cursor:pointer;">
+            📋 Klik Disini ↗
+          </a>
+        </div>
+
+        <!-- Summary card -->
+        <div style="margin-top:24px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:20px 20px 16px;">
+          <div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:14px;letter-spacing:0.04em;">✅ RINGKASAN ALUR SELESAI</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">1. Terima dokumen hardcopy</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">2. Scan dokumen</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">3. Rekam meta data ke Excel</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">4. Alirkan ke PIDE ✅</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wf-body -->
+
+    <div class="wf-nav">
+      <button class="wf-btn-prev" id="hcPrev" onclick="hcPrev()" disabled>
+        ← Sebelumnya
+      </button>
+      <span class="wf-step-page" id="hcPageNum">1 / 4</span>
+      <button class="wf-btn-next" id="hcNext" onclick="hcNext()">
+        Selanjutnya →
+      </button>
+    </div>
+
+  </div><!-- /wf-page -->
+</div><!-- /hcOverlay -->
 
 
 </body>
