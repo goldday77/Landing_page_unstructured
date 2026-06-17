@@ -463,6 +463,243 @@
       flex-shrink: 0;
     }
 
+    /* ===== WARNING POPUP ===== */
+    .warn-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .warn-overlay.open { display: flex; }
+
+    .warn-box {
+      background: #fff; border-radius: 18px; width: 100%; max-width: 640px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+      animation: slideUp 0.2s ease; overflow: hidden;
+    }
+
+    .warn-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 20px 24px 18px;
+      background: #FFF7ED; border-bottom: 1.5px solid #FED7AA;
+    }
+
+    .warn-icon-wrap {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #FB923C; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .warn-icon-wrap svg { width: 22px; height: 22px; color: #fff; }
+
+    .warn-title {
+      font-size: 18px; font-weight: 700; color: #9A3412; letter-spacing: 0.02em; flex: 1;
+    }
+
+    .warn-close {
+      width: 34px; height: 34px; border: none; background: transparent;
+      border-radius: 50%; cursor: pointer; color: #9A3412; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s;
+    }
+    .warn-close:hover { background: #FED7AA; }
+
+    .warn-body { padding: 20px 24px; max-height: 70vh; overflow-y: auto; }
+
+    .warn-note {
+      background: #FFFBEB; border: 1px solid #FDE68A;
+      border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;
+      font-size: 13.5px; color: #78350F; line-height: 1.65;
+    }
+
+    .warn-note-num {
+      font-weight: 700; color: #D97706; margin-right: 4px;
+    }
+
+    .warn-faq { margin-top: 16px; }
+
+    .warn-faq-title {
+      font-size: 12px; font-weight: 700; color: #9A3412;
+      letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 10px;
+    }
+
+    .warn-faq-item {
+      background: #FEF3C7; border-radius: 8px; padding: 10px 14px;
+      margin-bottom: 8px; font-size: 13px; color: #78350F; line-height: 1.6;
+    }
+
+    .warn-deadline {
+      margin-top: 16px; padding: 12px 16px;
+      background: #FEE2E2; border: 1px solid #FCA5A5;
+      border-radius: 10px; font-size: 13px; font-weight: 600; color: #991B1B;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .warn-deadline svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    .warn-footer {
+      padding: 16px 24px; border-top: 1px solid #E2E8F0;
+      display: flex; justify-content: flex-end;
+    }
+
+    .warn-btn-ok {
+      padding: 10px 28px; background: #1a73e8; color: #fff;
+      border: none; border-radius: 50px; font-size: 14px; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: background 0.15s;
+    }
+    .warn-btn-ok:hover { background: #0f52ba; }
+
+    /* ===== WORKFLOW PAGE ===== */
+    .wf-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55); overflow-y: auto; padding: 32px 16px;
+    }
+    .wf-overlay.open { display: block; }
+
+    .wf-page {
+      background: #F8FAFC; border-radius: 20px;
+      width: 100%; max-width: 860px; margin: 0 auto 32px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      overflow: hidden; animation: slideUp 0.22s ease;
+    }
+
+    .wf-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; background: #fff; border-bottom: 1px solid #E2E8F0;
+      position: sticky; top: 0; z-index: 10;
+    }
+
+    .wf-brand { display: flex; align-items: center; gap: 10px; }
+
+    .wf-brand-icon {
+      width: 36px; height: 36px; background: #1a73e8;
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .wf-brand-icon svg { width: 18px; height: 18px; color: #fff; }
+
+    .wf-brand-text { font-size: 14px; font-weight: 700; color: #1E293B; }
+    .wf-brand-sub  { font-size: 11px; color: #94A3B8; }
+
+    .wf-close {
+      width: 36px; height: 36px; border: none; background: transparent;
+      border-radius: 50%; cursor: pointer; color: #5f6368; font-size: 18px;
+      display: flex; align-items: center; justify-content: center; transition: background 0.1s;
+    }
+    .wf-close:hover { background: #f1f3f4; }
+
+    /* progress bar */
+    .wf-progress-bar {
+      height: 4px; background: #E2E8F0;
+    }
+    .wf-progress-fill {
+      height: 100%; background: linear-gradient(90deg, #1a73e8, #60a5fa);
+      transition: width 0.4s ease;
+    }
+
+    .wf-body { padding: 32px 32px 24px; }
+
+    /* step counter */
+    .wf-step-counter {
+      font-size: 12px; font-weight: 600; color: #94A3B8;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .wf-step-dots { display: flex; gap: 6px; }
+
+    .wf-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #E2E8F0; transition: background 0.3s, transform 0.3s;
+    }
+    .wf-dot.active { background: #1a73e8; transform: scale(1.3); }
+    .wf-dot.done   { background: #86efac; }
+
+    /* step card */
+    .wf-step-card {
+      display: none;
+      animation: fadeStep 0.3s ease;
+    }
+    .wf-step-card.active { display: block; }
+
+    @keyframes fadeStep {
+      from { opacity: 0; transform: translateX(18px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .wf-step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #1a73e8; color: #fff; font-size: 16px; font-weight: 700;
+      margin-bottom: 16px; flex-shrink: 0;
+    }
+
+    .wf-step-title {
+      font-size: 22px; font-weight: 700; color: #1E293B;
+      margin-bottom: 8px; letter-spacing: -0.02em; line-height: 1.3;
+    }
+
+    .wf-step-desc {
+      font-size: 15px; color: #475569; line-height: 1.75; margin-bottom: 20px;
+    }
+
+    .wf-step-tip {
+      background: #EFF6FF; border-left: 4px solid #1a73e8;
+      border-radius: 0 10px 10px 0; padding: 14px 16px;
+      font-size: 13.5px; color: #1E40AF; line-height: 1.65; margin-top: 16px;
+    }
+    .wf-step-tip strong { color: #1a73e8; }
+
+    .wf-step-warn {
+      background: #FFFBEB; border-left: 4px solid #F59E0B;
+      border-radius: 0 10px 10px 0; padding: 14px 16px;
+      font-size: 13.5px; color: #92400E; line-height: 1.65; margin-top: 16px;
+    }
+
+    .wf-step-code {
+      background: #0F172A; color: #7DD3FC; font-family: monospace;
+      font-size: 13px; padding: 14px 18px; border-radius: 10px;
+      margin-top: 14px; line-height: 1.8; overflow-x: auto;
+    }
+    .wf-step-code span.hl { color: #86EFAC; font-weight: 700; }
+    .wf-step-code span.cm { color: #64748B; }
+
+    /* image placeholder */
+    .wf-img-placeholder {
+      border: 2px dashed #CBD5E1; border-radius: 12px;
+      padding: 32px 20px; text-align: center; margin-top: 16px;
+      color: #94A3B8; background: #F8FAFC;
+    }
+    .wf-img-placeholder svg { width: 36px; height: 36px; margin-bottom: 8px; color: #CBD5E1; }
+    .wf-img-placeholder p { font-size: 13px; }
+    .wf-img-placeholder small { font-size: 11px; color: #CBD5E1; }
+
+    /* nav buttons */
+    .wf-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 32px 28px; border-top: 1px solid #E2E8F0; margin-top: 4px;
+    }
+
+    .wf-btn-prev, .wf-btn-next {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 24px; border-radius: 50px; font-size: 14px;
+      font-weight: 600; font-family: inherit; cursor: pointer; transition: all 0.15s;
+      border: 1.5px solid;
+    }
+
+    .wf-btn-prev {
+      background: #fff; color: #475569; border-color: #E2E8F0;
+    }
+    .wf-btn-prev:hover { background: #F1F5F9; }
+    .wf-btn-prev:disabled { opacity: 0.35; cursor: default; }
+
+    .wf-btn-next {
+      background: #1a73e8; color: #fff; border-color: #1a73e8;
+    }
+    .wf-btn-next:hover { background: #0f52ba; }
+    .wf-btn-next.finish { background: #059669; border-color: #059669; }
+    .wf-btn-next.finish:hover { background: #047857; }
+
+    .wf-step-page { font-size: 13px; color: #94A3B8; font-weight: 500; }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 600px) {
       .center { margin-top: 14vh; }
@@ -640,15 +877,8 @@
 
       <div class="menu-grid">
 
-        <!--
-          ============================================================
-          TOMBOL 1 — Tata Cara Pengelolaan Data Unstructured
-          EDIT URL: Ganti href="#" dengan link tujuan Anda
-          Contoh: href="https://drive.google.com/drive/folders/XXXXX"
-          ============================================================
-        -->
-        <a class="menu-card" href="#" target="_blank"
-           style="--c:#1a73e8; --ic:#EFF6FF;">
+        <!-- TOMBOL 1 — membuka workflow modal -->
+        <div class="menu-card" onclick="openWarning()" style="--c:#1a73e8; --ic:#EFF6FF; cursor:pointer;">
           <div class="menu-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -661,7 +891,7 @@
             <div class="menu-desc">SOP, panduan, dan prosedur standar</div>
           </div>
           <span class="menu-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
-        </a>
+        </div>
 
         <!--
           ============================================================
@@ -790,6 +1020,88 @@
 </div><!-- /overlay -->
 
 <script>
+  /* ===== WARNING POPUP ===== */
+  function openWarning() {
+    document.getElementById('warnOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWarning() {
+    document.getElementById('warnOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function proceedToWorkflow() {
+    document.getElementById('warnOverlay').classList.remove('open');
+    openWorkflow();
+  }
+
+  /* ===== WORKFLOW ===== */
+  const WF_TOTAL = 9;
+  let wfCurrent = 1;
+
+  function buildDots() {
+    const wrap = document.getElementById('wfDots');
+    wrap.innerHTML = '';
+    for (let i = 1; i <= WF_TOTAL; i++) {
+      const d = document.createElement('span');
+      d.className = 'wf-dot' + (i < wfCurrent ? ' done' : i === wfCurrent ? ' active' : '');
+      wrap.appendChild(d);
+    }
+  }
+
+  function updateWorkflow() {
+    for (let i = 1; i <= WF_TOTAL; i++) {
+      const el = document.getElementById('step-' + i);
+      if (el) el.classList.toggle('active', i === wfCurrent);
+    }
+    document.getElementById('wfStepLabel').textContent = 'Langkah ' + wfCurrent + ' dari ' + WF_TOTAL;
+    document.getElementById('wfPageNum').textContent = wfCurrent + ' / ' + WF_TOTAL;
+    document.getElementById('wfProgress').style.width = (wfCurrent / WF_TOTAL * 100) + '%';
+    document.getElementById('wfPrev').disabled = wfCurrent === 1;
+    const nextBtn = document.getElementById('wfNext');
+    if (wfCurrent === WF_TOTAL) {
+      nextBtn.textContent = '✓ Selesai';
+      nextBtn.classList.add('finish');
+    } else {
+      nextBtn.textContent = 'Selanjutnya →';
+      nextBtn.classList.remove('finish');
+    }
+    buildDots();
+  }
+
+  function wfNext() {
+    if (wfCurrent === WF_TOTAL) { closeWorkflow(); return; }
+    wfCurrent++;
+    updateWorkflow();
+    document.querySelector('.wf-body').scrollTop = 0;
+  }
+
+  function wfPrev() {
+    if (wfCurrent > 1) { wfCurrent--; updateWorkflow(); }
+    document.querySelector('.wf-body').scrollTop = 0;
+  }
+
+  function openWorkflow() {
+    wfCurrent = 1;
+    updateWorkflow();
+    document.getElementById('wfOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWorkflow() {
+    document.getElementById('wfOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeWarning(); closeWorkflow(); closePortal(); }
+    if (document.getElementById('wfOverlay').classList.contains('open')) {
+      if (e.key === 'ArrowRight') wfNext();
+      if (e.key === 'ArrowLeft') wfPrev();
+    }
+  });
+
   function openPortal() {
     document.getElementById('overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -808,6 +1120,304 @@
     if (e.key === 'Escape') closePortal();
   });
 </script>
+
+<!-- ===== WARNING POPUP ===== -->
+<div class="warn-overlay" id="warnOverlay">
+  <div class="warn-box">
+    <div class="warn-header">
+      <div class="warn-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="warn-title">⚠ PERHATIAN</div>
+      <button class="warn-close" onclick="closeWarning()">✕</button>
+    </div>
+
+    <div class="warn-body">
+      <p style="font-size:13px;color:#92400E;font-weight:600;margin-bottom:12px;">Baca dan pahami ketentuan berikut sebelum melanjutkan:</p>
+
+      <div class="warn-note"><span class="warn-note-num">1.</span> Untuk setiap data unstructured yang diterima, misalkan data Informasi Keuangan Daerah berisi 5 file (Excel maupun PDF), maka atas data tersebut <strong>dihitung sebanyak 5 dan satuannya ROW</strong>.</div>
+
+      <div class="warn-note"><span class="warn-note-num">2.</span> Jika file berbentuk <strong>ZIP atau RAR</strong>, maka kita <strong>extract dulu</strong> lalu hitung file yang ada di dalamnya. Ingat, satuannya ROW.<br><br>
+        <em>Contoh: 1 RAR berisi 5 PDF → dicatat sebagai <strong>5 rows</strong>. Bukan 1 RAR, bukan 1 file, bukan 1 dokumen besar.</em><br><br>
+        Jadi, istilah <strong>"row"</strong> di sini adalah <em>row administrasi</em>:<br>
+        &nbsp;• Bukan row isi data Excel<br>
+        &nbsp;• Bukan jumlah baris database<br>
+        &nbsp;• Tapi <strong>jumlah file/dokumen individual</strong> yang diadministrasikan sebagai data unstructured
+      </div>
+
+      <div class="warn-note"><span class="warn-note-num">3.</span> Penamaan: ubah nama <strong>folder</strong> menjadi nomor tiket, lalu <strong>file</strong> di dalamnya diubah menjadi nomor tiket + 4 digit nomor urut.<br>
+        <em>Contoh folder: <strong>KM00192972193601263</strong><br>
+        Nama file: <strong>KM001929721936012630001</strong>, KM001929721936012630002, dst.</em>
+      </div>
+
+      <div class="warn-note"><span class="warn-note-num">4.</span> Data unstructured <strong>wajib disimpan di NAS</strong> via Win-SCP. SharePoint hanya boleh jadi media bantu/koordinasi, <strong>bukan lokasi final administrasi</strong>.</div>
+
+      <div class="warn-note"><span class="warn-note-num">5.</span> Tempat penyimpanan di <strong>/E:/2026/UNSTRUCTURED</strong> atau <strong>/E:/2025/UNSTRUCTURED</strong> (sesuaikan tahun <em>terima data</em>, bukan tahun data). Buat folder baru dengan nama <strong>"NAMA ILAP_NO NDP"</strong>.</div>
+
+      <div class="warn-note"><span class="warn-note-num">6.</span> Pengiriman ke PIDE wajib menuliskan direktori tiap jenis data (tidak boleh gelondongan).<br>
+        <em>Contoh: /E:/2026/UNSTRUCTURED/<strong>GOWA ND-651.P_PJ.1031_2026</strong></em>
+      </div>
+
+      <div class="warn-note"><span class="warn-note-num">7.</span> Untuk <strong>pengembalian data unstructured</strong>, dalam ND pengiriman harus disebutkan: Nomor ND terdahulu · Nama ILAP · Nomor tiket lama · Nomor tiket baru · Jenis data · Jumlah row terdahulu · Jumlah row update · Lokasi direktori.</div>
+
+      <div class="warn-faq">
+        <div class="warn-faq-title">FAQ</div>
+        <div class="warn-faq-item"><strong>Q:</strong> Perlu dihitung ngga rows-nya misalkan file-nya berbentuk Excel?<br><strong>A:</strong> Tidak perlu, langsung dihitung saja sebagai <strong>1 row</strong>.</div>
+        <div class="warn-faq-item"><strong>Q:</strong> Kalau file-nya ada di beberapa folder bagaimana?<br><strong>A:</strong> Dijadikan <strong>satu folder saja</strong> (jangan ada subfolder).</div>
+      </div>
+
+      <div class="warn-deadline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        Setelah tanggal <u>1 Juli 2026</u>, tidak ada lagi pengiriman data ke PIDE menggunakan satuan selain ROWS.
+      </div>
+    </div>
+
+    <div class="warn-footer">
+      <button class="warn-btn-ok" onclick="proceedToWorkflow()">Saya Mengerti — Lanjutkan ›</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WORKFLOW PAGE ===== -->
+<div class="wf-overlay" id="wfOverlay">
+  <div class="wf-page">
+
+    <div class="wf-topbar">
+      <div class="wf-brand">
+        <div class="wf-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="wf-brand-text">Tata Cara Pengelolaan Data Unstructured</div>
+          <div class="wf-brand-sub">Alur Kerja Standar · 9 Langkah</div>
+        </div>
+      </div>
+      <button class="wf-close" onclick="closeWorkflow()">✕</button>
+    </div>
+
+    <div class="wf-progress-bar">
+      <div class="wf-progress-fill" id="wfProgress" style="width:11.1%"></div>
+    </div>
+
+    <div class="wf-body">
+      <!-- Step dots -->
+      <div class="wf-step-counter">
+        <span id="wfStepLabel">Langkah 1 dari 9</span>
+        <div class="wf-step-dots" id="wfDots"></div>
+      </div>
+
+      <!-- LANGKAH 1 -->
+      <div class="wf-step-card active" id="step-1">
+        <div class="wf-step-num">1</div>
+        <div class="wf-step-title">Terima Data Unstructured dari ILAP</div>
+        <div class="wf-step-desc">
+          Pegawai menerima data unstructured dari ILAP (Instansi/Lembaga/Asosiasi/Perorangan). Data dapat berupa file Excel, PDF, Word, ZIP, RAR, atau format lainnya.
+        </div>
+        <div class="wf-step-tip">
+          <strong>📌 Ingat:</strong> Catat nama ILAP dan nomor ND (Nota Dinas) pengantar sejak awal. Informasi ini akan dibutuhkan pada langkah-langkah berikutnya.
+        </div>
+      </div>
+
+      <!-- LANGKAH 2 -->
+      <div class="wf-step-card" id="step-2">
+        <div class="wf-step-num">2</div>
+        <div class="wf-step-title">Hitung Jumlah File → Tentukan Jumlah ROW</div>
+        <div class="wf-step-desc">
+          Teliti data yang diterima dengan menghitung jumlah file satu per satu. Jumlah file tersebut adalah jumlah ROW yang akan direkam.<br><br>
+          Jika ada file berbentuk <strong>ZIP atau RAR</strong>, extract terlebih dahulu, lalu hitung semua file di dalamnya.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Contoh penghitungan ROW:</span>
+1 file Excel       → <span class="hl">1 row</span>
+1 file PDF         → <span class="hl">1 row</span>
+1 RAR berisi 5 PDF → <span class="hl">5 rows</span>  <span class="cm">(bukan 1!)</span>
+3 Excel + 2 PDF    → <span class="hl">5 rows</span>
+        </div>
+        <div class="wf-step-warn">
+          ⚠ ROW di sini adalah <strong>row administrasi</strong> = jumlah file/dokumen individual. Bukan jumlah baris dalam Excel, bukan jumlah halaman PDF.
+        </div>
+      </div>
+
+      <!-- LANGKAH 3 -->
+      <div class="wf-step-card" id="step-3">
+        <div class="wf-step-num">3</div>
+        <div class="wf-step-title">Rekam ke Aplikasi DIAMOND</div>
+        <div class="wf-step-desc">
+          Buka aplikasi DIAMOND dan rekam data unstructured dengan mengisi jumlah ROW sesuai hasil hitungan pada langkah 2.
+        </div>
+        <div class="wf-step-tip">
+          <strong>🔗 Akses DIAMOND:</strong><br>
+          <a href="http://10.245.4.246:85/diamond/index.php" target="_blank"
+             style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
+            🖥 http://10.245.4.246:85/diamond/index.php ↗
+          </a><br><br>
+          Isi semua kolom yang tersedia, termasuk nama ILAP, jenis data, dan jumlah ROW.
+        </div>
+      </div>
+
+      <!-- LANGKAH 4 -->
+      <div class="wf-step-card" id="step-4">
+        <div class="wf-step-num">4</div>
+        <div class="wf-step-title">Beri Nama Folder dengan Nomor Tiket DIAMOND</div>
+        <div class="wf-step-desc">
+          Setelah perekaman berhasil, DIAMOND akan men-generate <strong>nomor tiket</strong>. Buat folder baru dan beri nama folder tersebut dengan nomor tiket yang dihasilkan.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Struktur folder:</span>
+📁 <span class="hl">KM00192972193601263</span>   <span class="cm">← nama = nomor tiket</span>
+   ├── file1.pdf
+   ├── file2.pdf
+   └── file3.xlsx
+        </div>
+        <div class="wf-step-tip">
+          <strong>📌 Penting:</strong> Semua file data unstructured dijadikan <strong>satu folder</strong>. Tidak boleh ada subfolder di dalamnya.
+        </div>
+      </div>
+
+      <!-- LANGKAH 5 -->
+      <div class="wf-step-card" id="step-5">
+        <div class="wf-step-num">5</div>
+        <div class="wf-step-title">Ubah Nama File dengan Nomor Tiket + Nomor Urut</div>
+        <div class="wf-step-desc">
+          Ubah nama seluruh file di dalam folder menggunakan format: <strong>nomor tiket + 4 digit nomor urut</strong> mulai dari 0001.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Format penamaan file:</span>
+📁 <span class="hl">KM00192972193601263</span>
+   ├── <span class="hl">KM001929721936012630001</span>.pdf
+   ├── <span class="hl">KM001929721936012630002</span>.pdf
+   └── <span class="hl">KM001929721936012630003</span>.xlsx
+
+<span class="cm"># Pola: [NomorTiket][0001], [NomorTiket][0002], dst.</span>
+        </div>
+        <div class="wf-step-tip">
+          <strong>💡 Tips:</strong> Gunakan aplikasi Rename File yang tersedia di tombol menu untuk mempercepat proses penamaan massal.
+        </div>
+      </div>
+
+      <!-- LANGKAH 6 -->
+      <div class="wf-step-card" id="step-6">
+        <div class="wf-step-num">6</div>
+        <div class="wf-step-title">Buka Win-SCP dan Buat Folder di NAS</div>
+        <div class="wf-step-desc">
+          Buka aplikasi <strong>Win-SCP</strong>, navigasi ke direktori NAS sesuai tahun terima data, lalu buat folder baru dengan format <strong>NAMA ILAP_Nomor ND Pengantar</strong>.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Direktori tujuan di NAS:</span>
+/E:/2026/UNSTRUCTURED/   <span class="cm">← jika data diterima tahun 2026</span>
+/E:/2025/UNSTRUCTURED/   <span class="cm">← jika data diterima tahun 2025</span>
+
+<span class="cm"># Nama folder baru yang dibuat:</span>
+📁 <span class="hl">GOWA ND-651.P_PJ.1031_2026</span>
+   <span class="cm">  ↑ Format: NAMA ILAP_Nomor ND Pengantar</span>
+        </div>
+        <div class="wf-step-warn">
+          ⚠ Gunakan tahun <strong>terima data</strong>, bukan tahun data itu sendiri.
+        </div>
+      </div>
+
+      <!-- LANGKAH 7 -->
+      <div class="wf-step-card" id="step-7">
+        <div class="wf-step-num">7</div>
+        <div class="wf-step-title">Pindahkan Folder ke NAS via Win-SCP</div>
+        <div class="wf-step-desc">
+          Upload atau pindahkan folder berisi file data unstructured (yang sudah dinamai dengan nomor tiket) ke dalam folder yang baru dibuat di NAS.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Struktur akhir di NAS:</span>
+/E:/2026/UNSTRUCTURED/
+└── 📁 <span class="hl">GOWA ND-651.P_PJ.1031_2026</span>/
+    └── 📁 <span class="hl">KM00192972193601263</span>/
+        ├── KM001929721936012630001.pdf
+        ├── KM001929721936012630002.pdf
+        └── KM001929721936012630003.xlsx
+        </div>
+        <div class="wf-step-tip">
+          <strong>📌 Ingat:</strong> Data unstructured <strong>wajib</strong> disimpan di NAS sebagai lokasi final. SharePoint hanya untuk koordinasi/media bantu.
+        </div>
+      </div>
+
+      <!-- LANGKAH 8 -->
+      <div class="wf-step-card" id="step-8">
+        <div class="wf-step-num">8</div>
+        <div class="wf-step-title">Copy Path Directory → Isi Surat Pengantar ke PIDE</div>
+        <div class="wf-step-desc">
+          Setelah file tersimpan di NAS, <strong>copy path directory</strong> dari Win-SCP, lalu cantumkan pada keterangan surat pengantar pengiriman data ke Seksi PIDE. Tulis direktori tiap jenis data secara spesifik — tidak boleh gelondongan.
+        </div>
+        <div class="wf-step-code">
+<span class="cm"># Contoh penulisan direktori di surat pengantar:</span>
+Lokasi data: <span class="hl">/E:/2026/UNSTRUCTURED/GOWA ND-651.P_PJ.1031_2026</span>
+        </div>
+        <div class="wf-img-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <p><strong>Contoh Surat Pengantar</strong></p>
+          <small>Gambar contoh surat pengantar dapat ditambahkan di sini.<br>Edit kode HTML — cari komentar "UPLOAD GAMBAR SURAT".</small>
+          <!-- UPLOAD GAMBAR SURAT: Ganti blok di bawah ini dengan tag <img> jika Anda punya gambar contoh surat.
+               Contoh: <img src="contoh-surat.png" style="width:100%;border-radius:8px;margin-top:12px;" alt="Contoh Surat Pengantar">
+          -->
+        </div>
+      </div>
+
+      <!-- LANGKAH 9 -->
+      <div class="wf-step-card" id="step-9">
+        <div class="wf-step-num">9</div>
+        <div class="wf-step-title">Catat di Monitoring Unstructured Data</div>
+        <div class="wf-step-desc">
+          Setelah data berhasil dikirim ke PIDE, catat seluruh informasi pengiriman pada laman <strong>Monitoring Unstructured Data</strong>.
+        </div>
+        <div class="wf-step-tip">
+          <strong>🔗 Akses Monitoring:</strong><br>
+          <a href="#" target="_blank" id="monitoringLink"
+             style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
+            📊 Buka Monitoring Unstructured Data ↗
+          </a>
+          <br><br>
+          <em style="font-size:12.5px;color:#64748B;">* URL monitoring akan aktif setelah Anda mengisi link di Tombol 2 pada menu utama.</em>
+        </div>
+
+        <!-- Summary card -->
+        <div style="margin-top:24px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:20px 20px 16px;">
+          <div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:14px;letter-spacing:0.04em;">✅ RINGKASAN ALUR SELESAI</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">1. Terima data dari ILAP</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">2. Hitung ROW (per file)</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">3. Rekam ke DIAMOND</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">4. Folder = Nomor Tiket</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">5. File = Tiket + 0001 dst.</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">6. Buat folder di NAS</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">7. Pindahkan ke NAS</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;">8. Copy path → surat PIDE</div>
+            <div style="font-size:12px;color:#15803D;background:#DCFCE7;border-radius:8px;padding:8px 12px;grid-column:1/-1;">9. Catat di Monitoring ✅</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /wf-body -->
+
+    <div class="wf-nav">
+      <button class="wf-btn-prev" id="wfPrev" onclick="wfPrev()" disabled>
+        ← Sebelumnya
+      </button>
+      <span class="wf-step-page" id="wfPageNum">1 / 9</span>
+      <button class="wf-btn-next" id="wfNext" onclick="wfNext()">
+        Selanjutnya →
+      </button>
+    </div>
+
+  </div><!-- /wf-page -->
+</div><!-- /wf-overlay -->
+
 
 </body>
 </html>
