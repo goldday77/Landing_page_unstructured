@@ -763,90 +763,12 @@
       </span>
     </form>
 
-    <!-- SHORTCUTS (mirip Google most visited) -->
-    <!--
-      ============================================================
-      CARA EDIT SHORTCUT:
-      Ganti href, warna background .shortcut-icon, huruf/angka,
-      dan .shortcut-label sesuai kebutuhan Anda.
-      ============================================================
-    -->
-    <div class="shortcuts">
-
-      <a class="shortcut" href="https://diamond.kemenkeu.go.id" target="_blank">
-        <div class="shortcut-icon" style="background:#1a1a2e;">
-          <span style="color:#fff;font-size:14px;font-weight:700;">D</span>
-        </div>
-        <span class="shortcut-label">DIAMOND v2.5.7</span>
-      </a>
-
-      <a class="shortcut" href="https://djponline.pajak.go.id" target="_blank">
-        <div class="shortcut-icon" style="background:#fff3cd;">
-          <span style="color:#d97706;font-size:14px;font-weight:700;">DJ</span>
-        </div>
-        <span class="shortcut-label">DJP Connect</span>
-      </a>
-
-      <a class="shortcut" href="https://monitoringspt.kemenkeu.go.id" target="_blank">
-        <div class="shortcut-icon" style="background:#4f46e5;">
-          <span style="color:#fff;font-size:13px;font-weight:700;">M</span>
-        </div>
-        <span class="shortcut-label">monitoringspt</span>
-      </a>
-
-      <a class="shortcut" href="https://satukemenkeu.kemenkeu.go.id" target="_blank">
-        <div class="shortcut-icon" style="background:#e8f4fd;">
-          <img src="https://www.google.com/s2/favicons?sz=64&domain=kemenkeu.go.id" alt="Satu Kemenkeu" />
-        </div>
-        <span class="shortcut-label">Satu Kemenkeu</span>
-      </a>
-
-      <a class="shortcut" href="https://sharepoint.com" target="_blank">
-        <div class="shortcut-icon" style="background:#e6f2fb;">
-          <span style="color:#0078d4;font-size:14px;font-weight:700;">SP</span>
-        </div>
-        <span class="shortcut-label">SharePoint</span>
-      </a>
-
-      <a class="shortcut" href="https://edlink.kemenkeu.go.id" target="_blank">
-        <div class="shortcut-icon" style="background:#ecfdf5;">
-          <span style="color:#059669;font-size:13px;font-weight:700;">EL</span>
-        </div>
-        <span class="shortcut-label">Edlink</span>
-      </a>
-
-      <a class="shortcut" href="#" target="_blank">
-        <div class="shortcut-icon" style="background:#fff0f0;">
-          <span style="color:#dc2626;font-size:13px;font-weight:700;">SB</span>
-        </div>
-        <span class="shortcut-label">Sulselbartra</span>
-      </a>
-
-      <a class="shortcut" href="https://web.whatsapp.com" target="_blank">
-        <div class="shortcut-icon" style="background:#e7fbe9;">
-          <span style="color:#25d366;font-size:14px;font-weight:700;">WA</span>
-        </div>
-        <span class="shortcut-label">WhatsApp</span>
-      </a>
-
-      <a class="shortcut" href="https://youtube.com" target="_blank">
-        <div class="shortcut-icon" style="background:#fff0f0;">
-          <span style="color:#FF0000;font-size:13px;font-weight:700;">YT</span>
-        </div>
-        <span class="shortcut-label">YouTube</span>
-      </a>
-
-      <!-- Tombol tambah shortcut -->
-      <div class="shortcut" onclick="alert('Edit file HTML untuk menambah shortcut — cari komentar CARA EDIT SHORTCUT')">
-        <div class="shortcut-icon" style="background:#f1f3f4;">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9aa0a6" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-        </div>
-        <span class="shortcut-label" style="color:#9aa0a6;">Tambah</span>
-      </div>
-
-    </div><!-- /shortcuts -->
+    <!-- MOST VISITED — otomatis terisi berdasarkan tautan yang paling sering
+         diklik oleh masing-masing pengguna (disimpan di browser pengguna
+         lewat localStorage). Mulai kosong, lalu tumbuh sendiri seiring waktu,
+         mirip "Paling Sering Dikunjungi" di halaman Tab Baru Google.
+         Dirender otomatis oleh fungsi mvRender() di bagian javascript. -->
+    <div class="shortcuts" id="mostVisited" style="display:none;"></div>
   </div>
 </div>
 
@@ -1180,6 +1102,115 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePortal();
   });
+
+  /* ===================================================================
+     MOST VISITED — daftar tautan paling sering dikunjungi, dihitung
+     otomatis dari klik tiap pengguna di browser-nya sendiri (localStorage).
+     Mulai kosong (belum ada riwayat), lalu tumbuh & berurutan ulang
+     sendiri seiring penggunaan — mirip "Paling Sering Dikunjungi" di
+     halaman Tab Baru Google.
+     =================================================================== */
+  const MV_KEY = 'mostVisitedSites_v1';
+  const MV_MAX = 10;
+
+  function mvEscape(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function mvLoad() {
+    try {
+      const raw = localStorage.getItem(MV_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function mvSave(list) {
+    try { localStorage.setItem(MV_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function mvFavicon(url) {
+    try {
+      const host = new URL(url, window.location.href).hostname;
+      return 'https://www.google.com/s2/favicons?sz=64&domain=' + host;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function mvDeriveTitle(link) {
+    if (link.dataset.mvTitle) return link.dataset.mvTitle;
+    const menuTitle = link.querySelector('.menu-title');
+    if (menuTitle) return menuTitle.textContent.trim();
+    let text = link.textContent.replace(/\s+/g, ' ').trim();
+    text = text.replace(/[↗🔗📊📄📋🖥]/g, '').trim();
+    if (text && text.length <= 40 && !/^https?:\/\//i.test(text)) return text;
+    try { return new URL(link.href, window.location.href).hostname; } catch (e) { return text || link.href; }
+  }
+
+  function mvTrack(url, title) {
+    if (!url || url === '#' || /^javascript:/i.test(url)) return;
+    const list = mvLoad();
+    const existing = list.find(function (item) { return item.url === url; });
+    if (existing) {
+      existing.count += 1;
+      existing.lastVisited = Date.now();
+      if (title) existing.title = title;
+    } else {
+      list.push({ url: url, title: title || url, count: 1, lastVisited: Date.now() });
+    }
+    mvSave(list);
+    mvRender();
+  }
+
+  function mvIconFallback(imgEl) {
+    const initial = mvEscape((imgEl.getAttribute('data-initial') || '?').charAt(0).toUpperCase());
+    imgEl.parentElement.innerHTML = '<span style="color:#5f6368;font-size:14px;font-weight:700;">' + initial + '</span>';
+  }
+
+  function mvRender() {
+    const wrap = document.getElementById('mostVisited');
+    if (!wrap) return;
+    const list = mvLoad()
+      .slice()
+      .sort(function (a, b) { return (b.count - a.count) || (b.lastVisited - a.lastVisited); })
+      .slice(0, MV_MAX);
+
+    if (list.length === 0) {
+      wrap.style.display = 'none';
+      wrap.innerHTML = '';
+      return;
+    }
+
+    wrap.style.display = 'flex';
+    wrap.innerHTML = list.map(function (item) {
+      const safeUrl = mvEscape(item.url);
+      const safeTitle = mvEscape(item.title || item.url);
+      const initial = mvEscape((item.title || '?').charAt(0).toUpperCase());
+      return (
+        '<a class="shortcut" href="' + safeUrl + '" target="_blank">' +
+          '<div class="shortcut-icon" style="background:#f1f3f4;">' +
+            '<img src="' + mvFavicon(item.url) + '" alt="" data-initial="' + initial + '" onerror="mvIconFallback(this)">' +
+          '</div>' +
+          '<span class="shortcut-label">' + safeTitle + '</span>' +
+        '</a>'
+      );
+    }).join('');
+  }
+
+  /* Lacak setiap klik pada tautan keluar (target="_blank") di seluruh halaman */
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('a[target="_blank"]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href || href === '#' || /^javascript:/i.test(href)) return;
+    mvTrack(href, mvDeriveTitle(link));
+  });
+
+  mvRender();
 </script>
 
 <!-- ===== WARNING POPUP ===== -->
@@ -1316,7 +1347,7 @@
         </div>
         <div class="wf-step-tip">
           <strong>🔗 Akses DIAMOND:</strong><br>
-          <a href="http://10.245.4.246:85/diamond/index.php" target="_blank"
+          <a href="http://10.245.4.246:85/diamond/index.php" target="_blank" data-mv-title="DIAMOND"
              style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
             🖥 http://10.245.4.246:85/diamond/index.php ↗
           </a><br><br>
@@ -1431,7 +1462,7 @@ Lokasi data: <span class="hl">/E:/2026/UNSTRUCTURED/GOWA ND-651.P_PJ.1031_2026</
         </div>
         <div class="wf-step-tip">
           <strong>🔗 Akses Monitoring:</strong><br>
-          <a href="https://kemenkeu.sharepoint.com/:x:/r/sites/P3DE/_layouts/15/Doc.aspx?sourcedoc=%7B97924F6D-F362-4CD8-90E0-A265302332F3%7D&file=Monitoring%20Unstructured%20Data%202026.xlsx&action=default&mobileredirect=true" target="_blank" id="monitoringLink"
+          <a href="https://kemenkeu.sharepoint.com/:x:/r/sites/P3DE/_layouts/15/Doc.aspx?sourcedoc=%7B97924F6D-F362-4CD8-90E0-A265302332F3%7D&file=Monitoring%20Unstructured%20Data%202026.xlsx&action=default&mobileredirect=true" target="_blank" id="monitoringLink" data-mv-title="Monitoring Unstructured Data"
              style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
             📊 Buka Monitoring Unstructured Data ↗
           </a>
@@ -1527,7 +1558,7 @@ Lokasi data: <span class="hl">/E:/2026/UNSTRUCTURED/GOWA ND-651.P_PJ.1031_2026</
         -->
         <div class="wf-step-tip">
           <strong>🔗 Tutorial Scan Dokumen:</strong><br>
-          <a href="#" target="_blank" id="scanTutorialLink"
+          <a href="#" target="_blank" id="scanTutorialLink" data-mv-title="Tutorial Scan Dokumen"
              style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
             📄 Klik Disini ↗
           </a>
@@ -1549,7 +1580,7 @@ Lokasi data: <span class="hl">/E:/2026/UNSTRUCTURED/GOWA ND-651.P_PJ.1031_2026</
         -->
         <div class="wf-step-tip">
           <strong>🔗 Excel Monitoring Data Hard Copy:</strong><br>
-          <a href="#" target="_blank" id="hcExcelLink"
+          <a href="#" target="_blank" id="hcExcelLink" data-mv-title="Excel Monitoring Hard Copy"
              style="color:#1a73e8;font-weight:700;font-size:15px;text-decoration:none;display:inline-block;margin-top:8px;padding:8px 16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE;">
             📊 Klik Disini ↗
           </a>
